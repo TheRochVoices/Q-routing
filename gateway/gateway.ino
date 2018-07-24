@@ -7,8 +7,8 @@
 #define CON_CHANNEL 0x100       //Channel for listening and broadcasting request for connecting a new node to the network or getting connected to the network, default value 100 
 
 // ce, csn pins
-RF24 radio(9, 10);
-uint64_t address = 0xF0F0F0F0E1LL;
+RF24 radio(7, 8);
+const byte address[6] = "00001";
 
 
 int nodes[3]={0,0,0};                   //Array that stores node id of nodes in connection
@@ -19,7 +19,6 @@ int my_id=1;                            //ID of gateway
 
 void listen_request() {
   /* This function is to add a new node to the network */
-  Serial.println("Incide listen_request");
   char id[4];
   id[0]=char(no_connected_nodes);
   id[1]=char(my_id);
@@ -29,7 +28,8 @@ void listen_request() {
 
   if(radio.available())
         {
-         /* Send ID to connecting device */ 
+         /* Send ID to connecting device */
+         Serial.println("radio is available"); 
          radio.stopListening();
          radio.openWritingPipe(address);
          radio.write(&id, sizeof(id));
