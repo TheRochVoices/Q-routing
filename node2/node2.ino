@@ -23,10 +23,10 @@ void readData()
    if (radio.available()) {
     char text[32] = "";
     radio.read(&text, sizeof(text));
+    radio.writeAckPayload(1, 2,1);
     String tex = String(text);
-    String tex1 = "Fuck you";
     writeData(tex);
-    writeData(tex1);
+//    writeData(tex1);
   } 
 }
 
@@ -34,9 +34,15 @@ void readData()
 void setup() {
   Serial.begin(9600);
   radio.begin();
+  delay(100);
+  radio.setAutoAck(true);
+  radio.enableAckPayload();
+  radio.enableDynamicPayloads();
   radio.openReadingPipe(0, address);
   radio.setPALevel(RF24_PA_MIN);
   radio.startListening();
+  radio.setRetries(0,15);
+
 }
 void loop() {
   readData();
