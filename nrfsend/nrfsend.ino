@@ -2,13 +2,16 @@
 #include <nRF24L01.h>
 #include <RF24.h>
 RF24 radio(7, 8); // CE, CSN
-const byte address[6] = "00001";
+String add = "00001";   //use a better variable name
+byte address[6];
+//const byte address[6] = "00001";
 int rec[1] = {5};
 long int beg, done;
-int qTable[1] = {0};
+float qTable[1] = {0};
 
-void sendData(byte address[])
+void sendData(String add)
 {
+  add.getBytes(address, 6);
   radio.stopListening();
   radio.openWritingPipe(address);
 
@@ -21,15 +24,15 @@ void sendData(byte address[])
         Serial.print("received ack");
         done = micros();
         //Serial.println(rec[0]);
-        qTable[0] = rec;
-        Serial.println("Contents of qTable: ");
+        qTable[0] = (done-beg) + float(.7*rec[0]);
         Serial.println(rec[0]);
+        Serial.println(qTable[0]);
       }
       else
       {
         Serial.println("status has become false so stop here....");
       }
-  delay(250);
+  delay(200);
 }
 
 void setup() {
@@ -48,5 +51,5 @@ void setup() {
  
 }
 void loop() {
- sendData(address);
+ sendData(add);
 }
