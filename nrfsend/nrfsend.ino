@@ -36,7 +36,7 @@ void sendData(String add)
 }
 
 void setup() {
-  Serial.begin(57600);
+  Serial.begin(9600);
   radio.begin();
   delay(100);
 

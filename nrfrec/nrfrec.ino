@@ -26,7 +26,8 @@ int bestNode()
 }
 void sendData(int  index)
 {
-  
+  Serial.println("sending data to");
+  Serial.println(neighbors[index]);
   byte bestNode[6];
   neighbors[index].getBytes(bestNode, 6);
   
@@ -58,13 +59,15 @@ void recieveData()
 {
   if (radio.available()) {
       int i = bestNode();
+      i=0;
+      Serial.println(i);
       done = micros();
       rec[0] = qTable[i];
       radio.writeAckPayload( 1, rec, sizeof(int) );
       char text[32] = "";
       radio.read(&text, sizeof(text));
       Serial.println(text);
-      //sendData(i);
+      sendData(i);
   }
 }
 void setup() {
